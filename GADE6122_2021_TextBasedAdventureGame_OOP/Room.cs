@@ -21,40 +21,51 @@ namespace GADE6122_2021_TextBasedAdventureGame_OOP
         //items inside the room
         public Item[] items;
 
+        const int MAX_ENTRIES = 4;
+        const int MAX_ITEMS = 6;
+
         //Methods
         public Room()
         {
-            nextRooms = new Room[4];
-            EntryCommands = new string[4];
-            items = new Item[4];
+            nextRooms = new Room[MAX_ENTRIES];
+            EntryCommands = new string[MAX_ENTRIES];
+            items = new Item[MAX_ITEMS];
         }
 
-        public bool ExecuteCommand(string command)
+        public string ExecuteCommand(string command, Character character)
         {
-            bool success = false;
+            string response = "Command not understood.";
             //check if command is an entry command
-            for(int i = 0; i < 4; i ++)
+            for(int i = 0; i < MAX_ENTRIES; i ++)
             {
                 if(EntryCommands[i] != null && command.ToLower() == EntryCommands[i].ToLower())
                 {
                     nextRoomNumber = i;
-                    success = true;
+                    response = "Entering next room.";
                 }
             }
 
             //check if command is a pickup command
-            for(int i = 0; i < 4; i ++)
+            for(int i = 0; i < MAX_ITEMS; i ++)
             {
                 if(items[i] != null && command.ToLower() == "pickup " + items[i].Name.ToLower())
                 {
-                    //give item to character
+                    //Make player pickup item
+                    character.Pickup(items[i]);
+                    response = "You picked up the " + items[i].Name;
+
+                    //remove item from room
                     items[i] = null;
-                    success = true;
                 }
             }
 
+            //check if command is the character
+            if (command.ToLower() == "char")
+            {
+                response = character.DisplayCharacterInformation();
+            }
 
-            return success;
+            return response;
         }
 
         public Room GetNextRoom()

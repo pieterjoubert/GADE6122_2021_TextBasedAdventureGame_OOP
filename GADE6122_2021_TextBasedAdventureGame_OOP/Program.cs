@@ -10,6 +10,12 @@ namespace GADE6122_2021_TextBasedAdventureGame_OOP
     {
         static void Main(string[] args)
         {
+            //Define character
+            Character hero = new Character();
+            hero.Name = "Pieter";
+            hero.HP = 100;
+            hero.Damage = 10;
+
             //Define items
             Item sword = new Item();
             sword.ID = 0;
@@ -39,19 +45,18 @@ namespace GADE6122_2021_TextBasedAdventureGame_OOP
 
             Room currentRoom = entrance;
 
+
             //main game loop
             while(true)
             {
+                Console.Clear();
                 Console.WriteLine(currentRoom.DisplayRoomInformation());
+                Console.Write(">>");
                 string command = Console.ReadLine().ToLower();
-                if(currentRoom.ExecuteCommand(command))
-                {
-                    currentRoom = currentRoom.GetNextRoom();
-                }
-                else
-                {
-                    Console.WriteLine("Command not recognized");
-                }
+                Console.WriteLine(currentRoom.ExecuteCommand(command, hero));
+                currentRoom = currentRoom.GetNextRoom();
+                Console.WriteLine("Please press ENTER to continue...");
+                Console.ReadLine();
             }
 
         }
